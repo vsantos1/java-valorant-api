@@ -1,0 +1,16 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?serverTimezone=UTC
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: ${JWT_SECRET}
