@@ -1,7 +1,9 @@
 package com.vsantos1.resources;
 
 import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.jwt.JwtService;
 import com.vsantos1.models.User;
+import com.vsantos1.repositories.filter.UserQueryFilter;
 import com.vsantos1.services.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +19,11 @@ public class UserResource {
 
     private final UserService userService;
 
-    public UserResource(UserService userService) {
+    private final JwtService jwtService;
+
+    public UserResource(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @GetMapping("/users/{user_id}")
@@ -26,9 +31,18 @@ public class UserResource {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findById(id));
     }
 
+    @GetMapping("/users/token")
+    public ResponseEntity<User> getByToken(@RequestHeader String Authorization) {
+        String token = Authorization.substring(7);
+        String email = jwtService.extractUsername(token);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findByEmail(email));
+    }
+
     @GetMapping("/users")
-    public ResponseEntity<Page<User>> getAll(@PageableDefault(size = 10, direction = Sort.Direction.ASC, page = 0, value = 10) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(pageable));
+    public ResponseEntity<Page<User>> getAll(@PageableDefault(size = 10, direction = Sort.Direction.ASC, page = 0, value = 10) Pageable pageable,
+                                            UserQueryFilter queryFilter) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAllOrQueryPaginated(pageable, queryFilter));
     }
 
     @PutMapping("/users/{user_id}")

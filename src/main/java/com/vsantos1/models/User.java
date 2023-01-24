@@ -22,7 +22,6 @@ public class User implements UserDetails {
 
     private String lastName;
 
-    @JsonIgnore
     @Column(unique = true)
     private String email;
 
@@ -81,6 +80,8 @@ public class User implements UserDetails {
         return this.password;
     }
 
+
+    @JsonIgnore
     @Override
     public String getUsername() {
         return this.email;

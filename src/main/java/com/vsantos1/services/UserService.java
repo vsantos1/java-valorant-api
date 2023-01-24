@@ -4,6 +4,7 @@ import com.vsantos1.dtos.RegisterDTO;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
+import com.vsantos1.repositories.filter.UserQueryFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -66,8 +67,11 @@ public class UserService {
         userRepository.deleteById(entity.getId());
     }
 
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<User> findAllOrQueryPaginated(Pageable pageable, UserQueryFilter query) {
+        if (query.getFirstname() == null && query.getLastname() == null) {
+            return userRepository.findAll(pageable);
+        }
+        return userRepository.findUserByFirstNameOrLastNameContainingIgnoreCase(query.getFirstname(), query.getLastname(), pageable);
     }
 
     public void activate(Long id) {
