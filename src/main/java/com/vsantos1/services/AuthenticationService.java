@@ -21,7 +21,7 @@ public class AuthenticationService {
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 365L; // 1 YEAR
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -29,8 +29,8 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
+    public AuthenticationService(UserService userService, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -47,7 +47,7 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setRole(role);
 
-        userRepository.save(user);
+        userService.execute(user);
 
         return new TokenDTO(accessToken(user), true, issuedAt(), expirationDate());
 
@@ -57,12 +57,9 @@ public class AuthenticationService {
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword());
         authenticationManager.authenticate(auth);
 
-        Optional<User> user = userRepository.findByEmail(authDTO.getEmail());
-        if (user.isPresent()) {
+        User user = userService.findByEmail(authDTO.getEmail());
 
-            return new TokenDTO(accessToken(user.get()), true, issuedAt(), expirationDate());
-        }
-        throw new UsernameNotFoundException("User or password invalid, try again.");
+        return new TokenDTO(accessToken(user), true, issuedAt(), expirationDate());
     }
 
     public String accessToken(User user) {
