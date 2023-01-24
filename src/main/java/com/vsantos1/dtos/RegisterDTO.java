@@ -1,5 +1,7 @@
 package com.vsantos1.dtos;
 
+import jakarta.persistence.Column;
+
 public class RegisterDTO {
 
     private String firstName;

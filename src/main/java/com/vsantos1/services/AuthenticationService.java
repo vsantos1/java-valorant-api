@@ -44,6 +44,8 @@ public class AuthenticationService {
 
         Mapper.copyProperties(registerDTO, user);
         user.setRole(role);
+        // TODO : implement email verification before saving user
+        user.setEnable(true);
         userService.execute(user);
 
         return new TokenDTO(accessToken(user), true, issuedAt(), expirationDate());

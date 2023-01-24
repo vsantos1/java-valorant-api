@@ -1,5 +1,7 @@
 package com.vsantos1.services;
 
+import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
@@ -44,13 +46,12 @@ public class UserService {
         throw new UsernameNotFoundException("No records found for this ID");
     }
 
-    public User update(User user, Long id) {
-        User entity = this.findById(id);
+    public User update(Long id, RegisterDTO registerDTO) {
+        User user = this.findById(id);
 
-        // TODO : add model mapper and map the given properties
-        BeanUtils.copyProperties(user, entity, "id");
 
-        return userRepository.save(entity);
+        Mapper.copyProperties(registerDTO, user);
+        return userRepository.save(user);
     }
 
     public void delete(Long id) {
@@ -60,5 +61,17 @@ public class UserService {
 
     public Page<User> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    public void activate(Long id) {
+        User user = this.findById(id);
+        user.setEnable(true);
+        userRepository.save(user);
+    }
+
+    public void inactivate(Long id) {
+        User user = this.findById(id);
+        user.setEnable(false);
+        userRepository.save(user);
     }
 }
