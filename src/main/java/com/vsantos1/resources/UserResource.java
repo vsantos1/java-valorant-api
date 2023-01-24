@@ -5,12 +5,15 @@ import com.vsantos1.jwt.JwtService;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.filter.UserQueryFilter;
 import com.vsantos1.services.UserService;
+import jakarta.annotation.security.RolesAllowed;
+import org.springframework.context.annotation.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,7 +44,7 @@ public class UserResource {
 
     @GetMapping("/users")
     public ResponseEntity<Page<User>> getAll(@PageableDefault(size = 10, direction = Sort.Direction.ASC, page = 0, value = 10) Pageable pageable,
-                                            UserQueryFilter queryFilter) {
+                                             UserQueryFilter queryFilter) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAllOrQueryPaginated(pageable, queryFilter));
     }
 
