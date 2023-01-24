@@ -2,6 +2,7 @@ package com.vsantos1.resources;
 
 import com.vsantos1.dtos.AuthDTO;
 import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.dtos.TokenDTO;
 import com.vsantos1.services.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +22,14 @@ public class AuthenticationResource {
 
     }
 
-
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<TokenDTO> register(@RequestBody RegisterDTO registerDTO) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(registerDTO));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthDTO authDTO) {
+    public ResponseEntity<TokenDTO> login(@RequestBody AuthDTO authDTO) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(authenticationService.authenticate(authDTO));
     }
 }

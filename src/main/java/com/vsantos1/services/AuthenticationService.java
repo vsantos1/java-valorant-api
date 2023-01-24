@@ -1,16 +1,25 @@
 package com.vsantos1.services;
 
+import com.vsantos1.dtos.AuthDTO;
 import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.dtos.TokenDTO;
 import com.vsantos1.enums.Role;
 import com.vsantos1.jwt.JwtService;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.Optional;
+
 @Service
 public class AuthenticationService {
+
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 365L; // 1 YEAR
 
     private final UserRepository userRepository;
 
@@ -27,7 +36,9 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public String register(RegisterDTO registerDTO) {
+    public TokenDTO register(RegisterDTO registerDTO) {
+
+        // TODO: add model mapper and map the given properties
         User user = new User();
 
         user.setEmail(registerDTO.getEmail());
@@ -38,7 +49,31 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        return jwtService.generateToken(user);
+        return new TokenDTO(accessToken(user), true, issuedAt(), expirationDate());
 
+    }
+
+    public TokenDTO authenticate(AuthDTO authDTO) {
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword());
+        authenticationManager.authenticate(auth);
+
+        Optional<User> user = userRepository.findByEmail(authDTO.getEmail());
+        if (user.isPresent()) {
+
+            return new TokenDTO(accessToken(user.get()), true, issuedAt(), expirationDate());
+        }
+        throw new UsernameNotFoundException("User or password invalid, try again.");
+    }
+
+    public String accessToken(User user) {
+        return jwtService.generateToken(user);
+    }
+
+    public Date expirationDate() {
+        return new Date(issuedAt().getTime() + EXPIRATION_TIME);
+    }
+
+    public Date issuedAt() {
+        return new Date();
     }
 }
