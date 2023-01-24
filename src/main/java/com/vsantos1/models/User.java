@@ -22,6 +22,7 @@ public class User implements UserDetails {
 
     private String lastName;
 
+    @JsonIgnore
     @Column(unique = true)
     private String email;
 
@@ -112,5 +113,13 @@ public class User implements UserDetails {
 
     public void setEnable(Boolean enable) {
         isEnable = enable;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

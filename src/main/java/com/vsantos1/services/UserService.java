@@ -4,10 +4,10 @@ import com.vsantos1.dtos.RegisterDTO;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,9 +17,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void execute(User user) {
@@ -49,8 +51,13 @@ public class UserService {
     public User update(Long id, RegisterDTO registerDTO) {
         User user = this.findById(id);
 
+        if (registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty()) {
+            registerDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        }
+
 
         Mapper.copyProperties(registerDTO, user);
+
         return userRepository.save(user);
     }
 
