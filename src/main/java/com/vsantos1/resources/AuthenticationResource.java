@@ -1,5 +1,6 @@
 package com.vsantos1.resources;
 
+import com.vsantos1.dtos.AuthDTO;
 import com.vsantos1.dtos.RegisterDTO;
 import com.vsantos1.services.AuthenticationService;
 import org.springframework.http.HttpStatus;
@@ -25,5 +26,10 @@ public class AuthenticationResource {
     public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(registerDTO));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody AuthDTO authDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(authenticationService.authenticate(authDTO));
     }
 }
