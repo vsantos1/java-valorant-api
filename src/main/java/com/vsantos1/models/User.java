@@ -1,5 +1,6 @@
 package com.vsantos1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vsantos1.enums.Role;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,11 +25,14 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
+    private Boolean isEnable;
 
     public Long getId() {
         return id;
@@ -103,6 +107,7 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
 
     @Override
     public boolean isEnabled() {

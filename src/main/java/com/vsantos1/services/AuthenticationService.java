@@ -5,6 +5,7 @@ import com.vsantos1.dtos.RegisterDTO;
 import com.vsantos1.dtos.TokenDTO;
 import com.vsantos1.enums.Role;
 import com.vsantos1.jwt.JwtService;
+import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,15 +39,11 @@ public class AuthenticationService {
 
     public TokenDTO register(RegisterDTO registerDTO, Role role) {
 
-        // TODO: add model mapper and map the given properties
         User user = new User();
+        registerDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
 
-        user.setEmail(registerDTO.getEmail());
-        user.setFirstName(registerDTO.getFirstName());
-        user.setLastName(registerDTO.getLastName());
-        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        Mapper.copyProperties(registerDTO, user);
         user.setRole(role);
-
         userService.execute(user);
 
         return new TokenDTO(accessToken(user), true, issuedAt(), expirationDate());

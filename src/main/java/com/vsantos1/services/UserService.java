@@ -3,6 +3,8 @@ package com.vsantos1.services;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -54,5 +56,9 @@ public class UserService {
     public void delete(Long id) {
         User entity = this.findById(id);
         userRepository.deleteById(entity.getId());
+    }
+
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }
