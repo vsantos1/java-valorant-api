@@ -36,7 +36,7 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public TokenDTO register(RegisterDTO registerDTO) {
+    public TokenDTO register(RegisterDTO registerDTO, Role role) {
 
         // TODO: add model mapper and map the given properties
         User user = new User();
@@ -45,7 +45,7 @@ public class AuthenticationService {
         user.setFirstName(registerDTO.getFirstName());
         user.setLastName(registerDTO.getLastName());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        user.setRole(Role.ROLE_USER);
+        user.setRole(role);
 
         userRepository.save(user);
 
@@ -76,4 +76,5 @@ public class AuthenticationService {
     public Date issuedAt() {
         return new Date();
     }
+
 }
