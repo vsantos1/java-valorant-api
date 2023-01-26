@@ -1,21 +1,18 @@
 package com.vsantos1.services;
 
 import com.vsantos1.dtos.AuthDTO;
-import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.dtos.UserDTO;
 import com.vsantos1.dtos.TokenDTO;
 import com.vsantos1.enums.Role;
 import com.vsantos1.jwt.JwtService;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
-import com.vsantos1.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -37,12 +34,12 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public TokenDTO register(RegisterDTO registerDTO, Role role) {
+    public TokenDTO register(UserDTO userDTO, Role role) {
 
         User user = new User();
-        registerDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
-        Mapper.copyProperties(registerDTO, user);
+        Mapper.copyProperties(userDTO, user);
         user.setRole(role);
         // TODO : implement email verification before saving user
         user.setEnable(true);

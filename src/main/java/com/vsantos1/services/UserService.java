@@ -1,6 +1,6 @@
 package com.vsantos1.services;
 
-import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.dtos.UserDTO;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -49,15 +50,15 @@ public class UserService {
         throw new UsernameNotFoundException("No records found for this ID");
     }
 
-    public User update(Long id, RegisterDTO registerDTO) {
+    public User update(Long id, UserDTO userDTO) {
         User user = this.findById(id);
 
-        if (registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty()) {
-            registerDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
 
 
-        Mapper.copyProperties(registerDTO, user);
+        Mapper.copyProperties(userDTO, user);
 
         return userRepository.save(user);
     }

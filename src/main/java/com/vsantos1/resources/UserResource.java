@@ -1,19 +1,16 @@
 package com.vsantos1.resources;
 
-import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.dtos.UserDTO;
 import com.vsantos1.jwt.JwtService;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.filter.UserQueryFilter;
 import com.vsantos1.services.UserService;
-import jakarta.annotation.security.RolesAllowed;
-import org.springframework.context.annotation.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -49,8 +46,8 @@ public class UserResource {
     }
 
     @PutMapping("/users/{user_id}")
-    public ResponseEntity<User> update(@PathVariable("user_id") Long id, @RequestBody RegisterDTO registerDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.update(id, registerDTO));
+    public ResponseEntity<User> update(@PathVariable("user_id") Long id, @RequestBody UserDTO userDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.update(id, userDTO));
     }
 
     @PatchMapping("/users/activate/{user_id}")

@@ -1,10 +1,11 @@
 package com.vsantos1.resources;
 
 import com.vsantos1.dtos.AuthDTO;
-import com.vsantos1.dtos.RegisterDTO;
+import com.vsantos1.dtos.UserDTO;
 import com.vsantos1.dtos.TokenDTO;
 import com.vsantos1.enums.Role;
 import com.vsantos1.services.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +25,9 @@ public class AuthenticationResource {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<TokenDTO> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<TokenDTO> register(@RequestBody @Valid UserDTO userDTO) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(registerDTO, Role.ROLE_USER));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(userDTO, Role.ROLE_USER));
     }
 
     @PostMapping("/login")

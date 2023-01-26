@@ -1,17 +1,18 @@
 package com.vsantos1.dtos;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.Email;
 
-public class RegisterDTO {
+public class UserDTO {
 
     private String firstName;
 
     private String lastName;
 
+    @Email
     private String email;
     private String password;
 
-    public RegisterDTO() {
+    public UserDTO() {
     }
 
     public String getFirstName() {

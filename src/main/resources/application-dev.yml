@@ -17,4 +17,4 @@ jwt:
 server:
   error:
     include-message: always
-    include-stacktrace: always
+    include-stacktrace: never
