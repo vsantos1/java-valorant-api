@@ -1,6 +1,7 @@
 package com.vsantos1.services;
 
 import com.vsantos1.dtos.UserDTO;
+import com.vsantos1.exceptions.ResourceNotFoundException;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
@@ -38,7 +39,7 @@ public class UserService {
         if (user.isPresent()) {
             return user.get();
         }
-        throw new UsernameNotFoundException("User or password invalid, try again.");
+        throw new ResourceNotFoundException("User or password invalid, try again.");
     }
 
     public User findById(Long id) {
@@ -47,7 +48,7 @@ public class UserService {
         if (user.isPresent()) {
             return user.get();
         }
-        throw new UsernameNotFoundException("No records found for this ID");
+        throw new ResourceNotFoundException("No records found for this ID");
     }
 
     public User update(Long id, UserDTO userDTO) {
