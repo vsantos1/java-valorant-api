@@ -15,7 +15,7 @@ public interface GameGateway {
 
     Game update(Long id, GameDTO gameDTO);
 
-    Optional<Game> findById(Long id);
+    Game findById(Long id);
 
     void deleteById(Long id);
 

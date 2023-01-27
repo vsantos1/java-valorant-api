@@ -1,14 +1,18 @@
 package com.vsantos1.services;
 
 import com.vsantos1.dtos.GameDTO;
+import com.vsantos1.exceptions.ResourceNotFoundException;
+import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.Game;
 import com.vsantos1.repositories.GameRepository;
 import com.vsantos1.services.gateways.GameGateway;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class GameService implements GameGateway {
 
     public final GameRepository gameRepository;
@@ -31,21 +35,37 @@ public class GameService implements GameGateway {
 
     @Override
     public Game execute(GameDTO gameDTO) {
-        return null;
+        Game game = new Game();
+
+        Mapper.copyProperties(gameDTO, game);
+        return gameRepository.save(game);
     }
 
     @Override
     public Game update(Long id, GameDTO gameDTO) {
-        return null;
+        Game game = this.findById(id);
+        Mapper.copyProperties(gameDTO, game);
+
+        return gameRepository.save(game);
     }
 
     @Override
-    public Optional<Game> findById(Long id) {
-        return Optional.empty();
+    public Game findById(Long id) {
+        Optional<Game> gameOptional = gameRepository.findById(id);
+
+        if (gameOptional.isEmpty()) {
+            throw new ResourceNotFoundException("No record found for this id");
+        }
+        return gameOptional.get();
+
     }
 
     @Override
     public void deleteById(Long id) {
+
+        Game game = this.findById(id);
+
+        gameRepository.deleteById(game.getId());
 
     }
 }
