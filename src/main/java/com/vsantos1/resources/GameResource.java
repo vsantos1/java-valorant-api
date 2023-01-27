@@ -38,7 +38,7 @@ public class GameResource {
 
     @GetMapping(value = "/games/{game_id}/maps")
     public ResponseEntity<List<GameMap>> getGameMaps(@PathVariable("game_id") Long gameId) {
-        return ResponseEntity.status(HttpStatus.OK).body(gameMapRepository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(gameMapRepository.findGameMapByGameId(gameId));
     }
 
     @GetMapping(value = "/games/{game_id}")
