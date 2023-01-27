@@ -22,7 +22,7 @@ public class GameResource {
     }
 
     @GetMapping(value = "/games")
-    public ResponseEntity<Page<Game>> getAllPaginated(@PageableDefault(size = 10) Pageable pageable, @RequestParam() String name) {
+    public ResponseEntity<Page<Game>> getAllPaginated(@PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) String name) {
 
         return ResponseEntity.status(HttpStatus.OK).body(gameService.findAllOrQueryPaginated(name, pageable));
     }

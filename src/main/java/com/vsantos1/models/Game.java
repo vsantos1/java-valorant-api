@@ -1,5 +1,6 @@
 package com.vsantos1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -21,7 +22,8 @@ public class Game implements Serializable {
 
     private String name;
 
-    @OneToMany
+    @JsonIgnore
+    @OneToMany(mappedBy = "game")
     private List<GameMap> maps;
 
     public Long getId() {

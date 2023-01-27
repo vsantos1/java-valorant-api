@@ -1,5 +1,6 @@
 package com.vsantos1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -17,8 +18,9 @@ public class GameMap implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")
+    @JsonIgnore
     private Game game;
 
 
