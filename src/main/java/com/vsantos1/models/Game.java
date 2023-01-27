@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +21,9 @@ public class Game implements Serializable {
 
     private String name;
 
+    @OneToMany
+    private List<GameMap> maps;
+
     public Long getId() {
         return id;
     }
@@ -34,6 +38,14 @@ public class Game implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<GameMap> getMaps() {
+        return maps;
+    }
+
+    public void setMaps(List<GameMap> maps) {
+        this.maps = maps;
     }
 
     @Override
