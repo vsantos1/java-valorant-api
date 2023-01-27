@@ -2,6 +2,9 @@ package com.vsantos1.resources;
 
 import com.vsantos1.dtos.GameDTO;
 import com.vsantos1.models.Game;
+import com.vsantos1.models.GameMap;
+import com.vsantos1.repositories.GameMapRepository;
+import com.vsantos1.services.GameMapService;
 import com.vsantos1.services.GameService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -11,20 +14,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/v1")
 public class GameResource {
 
     private final GameService gameService;
 
-    public GameResource(GameService gameService) {
+
+    private final GameMapRepository gameMapRepository;
+
+    public GameResource(GameService gameService, GameMapRepository gameMapRepository) {
         this.gameService = gameService;
+        this.gameMapRepository = gameMapRepository;
     }
 
     @GetMapping(value = "/games")
     public ResponseEntity<Page<Game>> getAllPaginated(@PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false) String name) {
 
         return ResponseEntity.status(HttpStatus.OK).body(gameService.findAllOrQueryPaginated(name, pageable));
+    }
+
+    @GetMapping(value = "/games/{game_id}/maps")
+    public ResponseEntity<List<GameMap>> getGameMaps(@PathVariable("game_id") Long gameId) {
+        return ResponseEntity.status(HttpStatus.OK).body(gameMapRepository.findAll());
     }
 
     @GetMapping(value = "/games/{game_id}")
