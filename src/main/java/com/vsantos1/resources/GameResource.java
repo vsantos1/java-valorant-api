@@ -1,16 +1,15 @@
 package com.vsantos1.resources;
 
+import com.vsantos1.dtos.GameDTO;
 import com.vsantos1.models.Game;
 import com.vsantos1.services.GameService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -28,10 +27,26 @@ public class GameResource {
         return ResponseEntity.status(HttpStatus.OK).body(gameService.findAllOrQueryPaginated(name, pageable));
     }
 
-    @GetMapping(value = "/games/{game_id")
-    public ResponseEntity<Game> findById(@RequestParam("game_id") Long id) {
+    @GetMapping(value = "/games/{game_id}")
+    public ResponseEntity<Game> findById(@PathVariable("game_id") Long id) {
 
         return ResponseEntity.status(HttpStatus.OK).body(gameService.findById(id));
     }
 
+    @PostMapping(value = "/games")
+    public ResponseEntity<Game> create(@RequestBody @Valid GameDTO gameDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(gameService.execute(gameDTO));
+    }
+
+    @PutMapping(value = "/games/{game_id}")
+    public ResponseEntity<Game> update(@PathVariable("game_id") Long id, @RequestBody @Valid GameDTO gameDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(gameService.update(id, gameDTO));
+    }
+
+    @DeleteMapping(value = "/games/{game_id}")
+    public ResponseEntity<Void> delete(@PathVariable("game_id") Long id) {
+        gameService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+    }
 }

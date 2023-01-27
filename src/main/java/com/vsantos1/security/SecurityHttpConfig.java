@@ -3,6 +3,7 @@ package com.vsantos1.security;
 import com.vsantos1.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,6 +35,7 @@ public class SecurityHttpConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/users/activate/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/games").permitAll()
                 .requestMatchers("/api/v1/users").hasRole("ADMIN")
                 .requestMatchers("/error").permitAll()
                 .anyRequest()
