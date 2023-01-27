@@ -39,7 +39,7 @@ public class UploadFileService {
         return new Cloudinary(config);
     }
 
-    public String upload(MultipartFile file, String folderName) {
+    public Map upload(MultipartFile file, String folderName) {
         try {
             File uploadedFile = convertMultiPartToFile(file);
             Map params = ObjectUtils.asMap(
@@ -48,8 +48,7 @@ public class UploadFileService {
                     "resource_type", "auto",
                     "transformation", new Transformation().width(500).height(500).crop("fill")
             );
-            Map uploadResult = getCloudinary().uploader().upload(uploadedFile, params);
-            return uploadResult.get("url").toString();
+            return getCloudinary().uploader().upload(uploadedFile, params);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

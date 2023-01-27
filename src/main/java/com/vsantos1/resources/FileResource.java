@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(value = "/api/v1")
 public class FileResource {
@@ -19,10 +21,10 @@ public class FileResource {
     }
 
 
-    @PostMapping(value = "/upload/file/{folderName}/maps", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadPhoto(@PathVariable("folderName") String folderName, @RequestParam("file") MultipartFile file) {
+    @PostMapping(value = "/upload/file/{folderName}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map> uploadPhoto(@PathVariable("folderName") String folderName, @RequestParam("file") MultipartFile file) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(uploadFileService.upload(file,folderName));
+        return ResponseEntity.status(HttpStatus.CREATED).body(uploadFileService.upload(file, folderName));
 
     }
 }
