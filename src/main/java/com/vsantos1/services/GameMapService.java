@@ -47,7 +47,8 @@ public class GameMapService {
     }
 
     public void delete(Long id) {
-        gameMapRepository.deleteById(id);
+        GameMap gameMap = this.findById(id);
+        gameMapRepository.deleteById(gameMap.getId());
     }
 
     public Page<GameMap> findAll(Pageable pageable) {
