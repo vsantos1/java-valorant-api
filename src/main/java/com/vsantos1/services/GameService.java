@@ -26,8 +26,8 @@ public class GameService implements GameGateway {
         this.gameMapRepository = gameMapRepository;
     }
 
-    public List<GameMap> findMapsByGameId(Long id) {
-        return gameMapRepository.findGameMapByGameId(id);
+    public List<GameMap> findMapsByGameId(String gameName) {
+        return gameMapRepository.findGameMapByGame_Name(gameName);
     }
 
     @Override

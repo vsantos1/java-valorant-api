@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface GameMapRepository extends JpaRepository<GameMap, Long> {
 
-    List<GameMap> findGameMapByGameId(Long id);
+    List<GameMap> findGameMapByGame_Name(String name);
 }

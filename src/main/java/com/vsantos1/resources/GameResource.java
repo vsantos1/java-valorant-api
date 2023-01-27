@@ -34,9 +34,9 @@ public class GameResource {
         return ResponseEntity.status(HttpStatus.OK).body(gameService.findAllOrQueryPaginated(name, pageable));
     }
 
-    @GetMapping(value = "/games/{game_id}/maps")
-    public ResponseEntity<List<GameMap>> getGameMaps(@PathVariable("game_id") Long gameId) {
-        return ResponseEntity.status(HttpStatus.OK).body(gameService.findMapsByGameId(gameId));
+    @GetMapping(value = "/games/{game_name}/maps")
+    public ResponseEntity<List<GameMap>> getGameMaps(@PathVariable("game_name") String gameName) {
+        return ResponseEntity.status(HttpStatus.OK).body(gameService.findMapsByGameId(gameName));
     }
 
     @GetMapping(value = "/games/{game_id}")
