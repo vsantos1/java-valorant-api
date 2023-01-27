@@ -23,11 +23,9 @@ public class GameResource {
     private final GameService gameService;
 
 
-    private final GameMapRepository gameMapRepository;
-
-    public GameResource(GameService gameService, GameMapRepository gameMapRepository) {
+    public GameResource(GameService gameService) {
         this.gameService = gameService;
-        this.gameMapRepository = gameMapRepository;
+
     }
 
     @GetMapping(value = "/games")
@@ -38,7 +36,7 @@ public class GameResource {
 
     @GetMapping(value = "/games/{game_id}/maps")
     public ResponseEntity<List<GameMap>> getGameMaps(@PathVariable("game_id") Long gameId) {
-        return ResponseEntity.status(HttpStatus.OK).body(gameMapRepository.findGameMapByGameId(gameId));
+        return ResponseEntity.status(HttpStatus.OK).body(gameService.findMapsByGameId(gameId));
     }
 
     @GetMapping(value = "/games/{game_id}")
