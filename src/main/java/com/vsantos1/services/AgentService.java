@@ -4,7 +4,9 @@ import com.vsantos1.dtos.AgentDTO;
 import com.vsantos1.exceptions.ResourceNotFoundException;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.Agent;
+import com.vsantos1.models.Game;
 import com.vsantos1.repositories.AgentRepository;
+import com.vsantos1.repositories.GameRepository;
 import com.vsantos1.services.gateways.AgentGateway;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +20,11 @@ public class AgentService implements AgentGateway {
 
     private final AgentRepository agentRepository;
 
-    public AgentService(AgentRepository agentRepository) {
+    private final GameRepository gameRepository;
+
+    public AgentService(AgentRepository agentRepository, GameRepository gameRepository) {
         this.agentRepository = agentRepository;
+        this.gameRepository = gameRepository;
     }
 
     @Override
@@ -35,6 +40,10 @@ public class AgentService implements AgentGateway {
             return agentOptional.get();
         }
         throw new ResourceNotFoundException("No records found for this ID");
+    }
+
+    public Game findGameByAgent(String name) {
+        return gameRepository.findGameByAgents_Name(name);
     }
 
     @Override

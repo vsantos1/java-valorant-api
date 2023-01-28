@@ -2,6 +2,7 @@ package com.vsantos1.resources;
 
 import com.vsantos1.dtos.AgentDTO;
 import com.vsantos1.models.Agent;
+import com.vsantos1.models.Game;
 import com.vsantos1.services.AgentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,11 @@ public class AgentResource {
     @GetMapping(value = "/agents/{agent_id}")
     public ResponseEntity<Agent> getById(@PathVariable("agent_id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(agentService.findById(id));
+    }
+
+    @GetMapping(value = "/agents/{agent_name}/games")
+    public ResponseEntity<Game> getByAgentName(@PathVariable("agent_name") String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(agentService.findGameByAgent(name));
     }
 
     @PostMapping(value = "/agents")
