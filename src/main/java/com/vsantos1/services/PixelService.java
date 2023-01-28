@@ -88,21 +88,18 @@ public class PixelService {
     public Pixel updatePixelCreatedByUser(UUID id, PixelDTO pixelDTO, String authorization) {
         Slugify slug = Slugify.builder().locale(Locale.ENGLISH).build();
         String slugString = slug.slugify(pixelDTO.getTitle());
-        if (alreadyExists(slugString)) {
-            throw new UserNotAllowedException("Slug already exists");
+        if (!alreadyExists(slugString) && pixelDTO.getTitle() != null) {
+            pixelDTO.setSlug(slugString);
+
         }
 
         if (!createdByMe(id, authorization)) {
             throw new UserNotAllowedException("You are not allowed to update this pixel");
         }
 
-        if (alreadyExists(pixelDTO.getSlug())) {
-            throw new UserNotAllowedException("Slug already exists");
-        }
 
         Pixel pixel = this.findById(id);
         pixelDTO.setVerified(false);
-        pixelDTO.setSlug(slugString);
         Mapper.copyProperties(pixelDTO, pixel);
         return pixelRepository.save(pixel);
 
@@ -111,15 +108,15 @@ public class PixelService {
     public Pixel update(UUID id, PixelDTO pixelDTO) {
         Slugify slug = Slugify.builder().locale(Locale.ENGLISH).build();
         String slugString = slug.slugify(pixelDTO.getTitle());
-        if (alreadyExists(slugString)) {
-            throw new UserNotAllowedException("Slug already exists");
+        if (!alreadyExists(slugString) && pixelDTO.getTitle() != null) {
+            pixelDTO.setSlug(slugString);
+
         }
 
 
         Pixel pixel = this.findById(id);
 
         pixelDTO.setUpdatedAt(new Date());
-        pixelDTO.setSlug(slugString);
         Mapper.copyProperties(pixelDTO, pixel);
 
         return pixelRepository.save(pixel);
