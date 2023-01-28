@@ -22,8 +22,9 @@ public class Game implements Serializable {
 
     private String name;
 
-    @OneToOne(mappedBy = "game")
-    private Agent agent;
+    @OneToMany(mappedBy = "game")
+    @JsonIgnore
+    private List<Agent> agents;
 
 
     @JsonIgnore
@@ -54,6 +55,14 @@ public class Game implements Serializable {
         this.maps = maps;
     }
 
+    public List<Agent> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agent> agents) {
+        this.agents = agents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,13 +71,6 @@ public class Game implements Serializable {
         return id.equals(game.id);
     }
 
-    public Agent getAgent() {
-        return agent;
-    }
-
-    public void setAgent(Agent agent) {
-        this.agent = agent;
-    }
 
     @Override
     public int hashCode() {

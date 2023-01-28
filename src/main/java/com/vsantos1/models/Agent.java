@@ -1,5 +1,6 @@
 package com.vsantos1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -21,8 +22,9 @@ public class Agent implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")
+    @JsonIgnore
     private Game game;
 
     // TODO: implement pixels table
