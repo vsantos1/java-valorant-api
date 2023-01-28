@@ -2,17 +2,16 @@ package com.vsantos1.services;
 
 import com.vsantos1.dtos.UserDTO;
 import com.vsantos1.exceptions.ResourceNotFoundException;
+import com.vsantos1.jwt.JwtService;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.UserRepository;
 import com.vsantos1.repositories.filter.UserQueryFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -22,9 +21,12 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private final JwtService jwtService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public void execute(User user) {
@@ -40,6 +42,11 @@ public class UserService {
             return user.get();
         }
         throw new ResourceNotFoundException("User or password invalid, try again.");
+    }
+
+    public User loadUserByToken(String authorization) {
+        String token = authorization.substring(7);
+        return this.findByEmail(jwtService.extractUsername(token));
     }
 
     public User findById(Long id) {

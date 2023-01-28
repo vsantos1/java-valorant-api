@@ -1,5 +1,6 @@
 package com.vsantos1.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vsantos1.enums.Ability;
 import com.vsantos1.enums.TickRate;
 import com.vsantos1.enums.Type;
@@ -37,6 +38,7 @@ public class Pixel implements Serializable {
     @Enumerated(EnumType.STRING)
     private TickRate tickRate;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -55,7 +57,8 @@ public class Pixel implements Serializable {
     private Date updatedAt;
 
 
-    public Pixel(){}
+    public Pixel() {
+    }
 
     public UUID getId() {
         return id;

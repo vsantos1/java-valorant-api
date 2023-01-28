@@ -33,10 +33,8 @@ public class UserResource {
 
     @GetMapping("/users/token")
     public ResponseEntity<User> getByToken(@RequestHeader String Authorization) {
-        String token = Authorization.substring(7);
-        String email = jwtService.extractUsername(token);
 
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findByEmail(email));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.loadUserByToken(Authorization));
     }
 
     @GetMapping("/users")

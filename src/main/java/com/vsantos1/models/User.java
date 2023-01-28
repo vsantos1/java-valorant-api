@@ -33,6 +33,7 @@ public class User implements UserDetails {
 
     private Boolean isEnable;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Pixel> pixels;
 

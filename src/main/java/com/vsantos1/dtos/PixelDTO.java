@@ -5,7 +5,6 @@ import com.vsantos1.enums.TickRate;
 import com.vsantos1.enums.Type;
 import com.vsantos1.models.GameMap;
 import com.vsantos1.models.User;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.Date;
 
@@ -14,7 +13,6 @@ public class PixelDTO {
     private String title;
     private String description;
 
-    @UniqueElements
     private String slug;
 
     private Type type;
@@ -25,7 +23,7 @@ public class PixelDTO {
 
     private User user;
 
-    private GameMap map;
+    private GameMap gameMap;
 
     private String videoUrl;
 
@@ -33,8 +31,10 @@ public class PixelDTO {
 
     private Date updatedAt;
 
+
     public PixelDTO() {
     }
+
 
     public String getTitle() {
         return title;
@@ -92,12 +92,17 @@ public class PixelDTO {
         this.user = user;
     }
 
-    public GameMap getMap() {
-        return map;
+    public Boolean getEnabled() {
+        return user.getEnable();
     }
 
-    public void setMap(GameMap map) {
-        this.map = map;
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
     }
 
     public String getVideoUrl() {
