@@ -17,5 +17,7 @@ public interface PixelRepository extends JpaRepository<Pixel, UUID> {
 
     Optional<Pixel> findBySlug(String slug);
 
+    Integer countByUser(User user);
+
     boolean findPixelByIdAndUser(UUID id, User user);
 }

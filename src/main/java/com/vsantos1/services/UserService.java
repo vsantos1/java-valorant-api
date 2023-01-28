@@ -44,6 +44,21 @@ public class UserService {
         throw new ResourceNotFoundException("User or password invalid, try again.");
     }
 
+    public Boolean isAdmin(String authorization) {
+        User user = loadUserByToken(authorization);
+        return user.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    public Boolean isUser(String authorization) {
+        User user = loadUserByToken(authorization);
+        return user.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_USER"));
+    }
+
+    public Boolean isSupporter(String authorization) {
+        User user = loadUserByToken(authorization);
+        return user.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_SUPPORTER"));
+    }
+
     public User loadUserByToken(String authorization) {
         String token = authorization.substring(7);
         return this.findByEmail(jwtService.extractUsername(token));

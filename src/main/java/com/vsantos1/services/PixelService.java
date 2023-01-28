@@ -38,6 +38,13 @@ public class PixelService {
     }
 
     public Pixel execute(PixelDTO pixelDTO, String authorization) {
+        if (countByUser(authorization) >= 10 && userService.isUser(authorization)) {
+            throw new UserNotAllowedException("You have reached the limit of 10 pixels");
+        }
+        if (countByUser(authorization) >= 50 && userService.isSupporter(authorization)) {
+            throw new UserNotAllowedException("You have reached the limit of 50 pixels");
+        }
+
         if (alreadyExists(pixelDTO.getSlug())) {
             throw new UserNotAllowedException("Slug already exists");
         }
@@ -80,6 +87,12 @@ public class PixelService {
         throw new ResourceNotFoundException("No records found for this ID");
 
     }
+
+    public Integer countByUser(String token) {
+        User user = userService.loadUserByToken(token);
+        return pixelRepository.countByUser(user);
+    }
+
 
     public boolean alreadyExists(String slug) {
         return pixelRepository.existsBySlug(slug);
