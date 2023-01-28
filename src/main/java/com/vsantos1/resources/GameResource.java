@@ -51,7 +51,7 @@ public class GameResource {
     }
 
     @PutMapping(value = "/games/{game_id}")
-    public ResponseEntity<Game> update(@PathVariable("game_id") Long id, @RequestBody @Valid GameDTO gameDTO) {
+    public ResponseEntity<Game> update(@PathVariable("game_id") Long id, @RequestBody GameDTO gameDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(gameService.update(id, gameDTO));
     }
 

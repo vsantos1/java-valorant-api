@@ -22,6 +22,7 @@ public class Game implements Serializable {
 
     private String name;
 
+    private String company;
     @OneToMany(mappedBy = "game")
     @JsonIgnore
     private List<Agent> agents;
@@ -61,6 +62,14 @@ public class Game implements Serializable {
 
     public void setAgents(List<Agent> agents) {
         this.agents = agents;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override
