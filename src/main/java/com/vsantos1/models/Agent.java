@@ -14,15 +14,19 @@ public class Agent implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    private Long id;
 
     private String name;
 
     @Column(name = "image_url")
     private String imageUrl;
 
+    @OneToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
+
     // TODO: implement pixels table
 
-    private Long id;
 
     public Long getId() {
         return id;
@@ -46,5 +50,13 @@ public class Agent implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

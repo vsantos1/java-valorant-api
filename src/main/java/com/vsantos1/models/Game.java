@@ -22,6 +22,10 @@ public class Game implements Serializable {
 
     private String name;
 
+    @OneToOne(mappedBy = "game")
+    private Agent agent;
+
+
     @JsonIgnore
     @OneToMany(mappedBy = "game")
     private List<GameMap> maps;
@@ -56,6 +60,14 @@ public class Game implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
         return id.equals(game.id);
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     @Override
