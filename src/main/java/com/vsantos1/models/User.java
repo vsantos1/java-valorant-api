@@ -31,8 +31,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-
     private Boolean isEnable;
+
+    @OneToMany(mappedBy = "user")
+    private List<Pixel> pixels;
 
     public Long getId() {
         return id;
@@ -118,6 +120,14 @@ public class User implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public List<Pixel> getPixels() {
+        return pixels;
+    }
+
+    public void setPixels(List<Pixel> pixels) {
+        this.pixels = pixels;
     }
 
     public void setEmail(String email) {
