@@ -45,8 +45,7 @@ public class UploadFileService {
             Map params = ObjectUtils.asMap(
                     "public_id", folderName + "/" + UUID.randomUUID(),
                     "overwrite", false,
-                    "resource_type", "auto",
-                    "transformation", new Transformation().width(500).height(500).crop("fill")
+                    "resource_type", "auto"
             );
             return getCloudinary().uploader().upload(uploadedFile, params);
         } catch (Exception e) {
