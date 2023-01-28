@@ -2,10 +2,7 @@ package com.vsantos1.resources;
 
 import com.github.slugify.Slugify;
 import com.vsantos1.dtos.PixelDTO;
-import com.vsantos1.exceptions.ResourceNotFoundException;
 import com.vsantos1.models.Pixel;
-import com.vsantos1.models.User;
-import com.vsantos1.repositories.UserRepository;
 import com.vsantos1.services.PixelService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -16,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -35,9 +31,9 @@ public class PixelResource {
         return ResponseEntity.status(HttpStatus.OK).body(pixelService.findAllPaginated(pageable));
     }
 
-    @GetMapping(value = "/pixels/{pixel_id}")
-    public ResponseEntity<Pixel> getById(@PathVariable("pixel_id") UUID id) {
-        return ResponseEntity.status(HttpStatus.OK).body(pixelService.findById(id));
+    @GetMapping(value = "/pixels/{pixel_slug}")
+    public ResponseEntity<Pixel> getById(@PathVariable("pixel_slug") String slug) {
+        return ResponseEntity.status(HttpStatus.OK).body(pixelService.findBySlug(slug));
     }
 
 
@@ -49,14 +45,32 @@ public class PixelResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(pixelService.execute(pixelDTO, authorization));
     }
 
-    @PutMapping(value = "/pixels/{pixel_id}")
+    @GetMapping(value = "/pixels/me")
+    public ResponseEntity<Page<Pixel>> getPixelsCreatedByUser(@RequestHeader String authorization, @PageableDefault() Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(pixelService.findPixelsCreatedByUser(authorization, pageable));
+    }
+
+    @PutMapping(value = "/pixels/me/edit/{pixel_id}")
+    public ResponseEntity<Pixel> updatePixelCreatedByUser(@PathVariable("pixel_id") UUID id, @RequestBody PixelDTO pixelDTO, @RequestHeader String authorization) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(pixelService.updatePixelCreatedByUser(id, pixelDTO, authorization));
+    }
+
+    @PutMapping(value = "/pixels/edit/{pixel_id}")
     public ResponseEntity<Pixel> update(@PathVariable("pixel_id") UUID id, @RequestBody PixelDTO pixelDTO) {
 
         return ResponseEntity.status(HttpStatus.OK).body(pixelService.update(id, pixelDTO));
     }
-    @DeleteMapping(value = "/pixels/{pixel_id}")
+
+    @DeleteMapping(value = "/pixels/delete/{pixel_id}")
     public ResponseEntity<Void> delete(@PathVariable("pixel_id") UUID id) {
         pixelService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping(value = "/pixels/me/{pixel_id}")
+    public ResponseEntity<Void> deleteByUser(@PathVariable("pixel_id") UUID id, @RequestHeader String authorization) {
+        pixelService.deleteByUser(id, authorization);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -19,4 +19,12 @@ public class CustomResponseEntityHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 
     }
+
+    @ExceptionHandler(UserNotAllowedException.class)
+    public final ResponseEntity<ExceptionResponse> handleUserNotAllowedException(Exception ex, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), HttpStatus.FORBIDDEN, request.getRequestURI());
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+
+    }
 }
