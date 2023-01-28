@@ -1,5 +1,6 @@
 package com.vsantos1.dtos;
 
+import com.vsantos1.enums.Role;
 import jakarta.validation.constraints.Email;
 
 public class UserDTO {
@@ -11,6 +12,8 @@ public class UserDTO {
     @Email
     private String email;
     private String password;
+
+    private Role role;
 
     public UserDTO() {
     }
@@ -45,5 +48,13 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

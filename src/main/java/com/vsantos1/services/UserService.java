@@ -1,6 +1,7 @@
 package com.vsantos1.services;
 
 import com.vsantos1.dtos.UserDTO;
+import com.vsantos1.enums.Role;
 import com.vsantos1.exceptions.ResourceNotFoundException;
 import com.vsantos1.jwt.JwtService;
 import com.vsantos1.mapper.Mapper;
@@ -107,6 +108,13 @@ public class UserService {
     public void inactivate(Long id) {
         User user = this.findById(id);
         user.setEnable(false);
+        userRepository.save(user);
+    }
+
+    public void changeRole(Long id, UserDTO userDTO) {
+        User user = this.findById(id);
+        user.setRole(userDTO.getRole());
+
         userRepository.save(user);
     }
 }

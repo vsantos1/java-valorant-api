@@ -1,6 +1,7 @@
 package com.vsantos1.resources;
 
 import com.vsantos1.dtos.UserDTO;
+import com.vsantos1.enums.Role;
 import com.vsantos1.jwt.JwtService;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.filter.UserQueryFilter;
@@ -19,11 +20,9 @@ public class UserResource {
 
     private final UserService userService;
 
-    private final JwtService jwtService;
 
-    public UserResource(UserService userService, JwtService jwtService) {
+    public UserResource(UserService userService) {
         this.userService = userService;
-        this.jwtService = jwtService;
     }
 
     @GetMapping("/users/{user_id}")
@@ -51,6 +50,12 @@ public class UserResource {
     @PatchMapping("/users/activate/{user_id}")
     public ResponseEntity<Void> activate(@PathVariable("user_id") Long id) {
         userService.activate(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PatchMapping(value = "/users/role/{user_id}")
+    public ResponseEntity<Void> changeRole(@PathVariable("user_id") Long id, @RequestBody UserDTO userDTO) {
+        userService.changeRole(id, userDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
