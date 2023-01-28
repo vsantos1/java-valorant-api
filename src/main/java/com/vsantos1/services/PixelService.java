@@ -1,6 +1,7 @@
 package com.vsantos1.services;
 
 import com.vsantos1.dtos.PixelDTO;
+import com.vsantos1.enums.Role;
 import com.vsantos1.exceptions.ResourceNotFoundException;
 import com.vsantos1.jwt.JwtService;
 import com.vsantos1.mapper.Mapper;
@@ -38,7 +39,14 @@ public class PixelService {
 
 
         pixelDTO.setCreatedAt(new Date());
-        pixelDTO.setUser(userService.loadUserByToken(authorization));
+        User user = userService.loadUserByToken(authorization);
+
+        // If user is not admin, set isVerified will start as false
+        if (user.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(Role.ROLE_ADMIN.name()))) {
+            pixelDTO.setVerified(true);
+        }
+        pixelDTO.setVerified(false);
+        pixelDTO.setUser(user);
         Mapper.copyProperties(pixelDTO, pixel);
         return pixelRepository.save(pixel);
     }
@@ -56,10 +64,13 @@ public class PixelService {
     public Pixel update(UUID id, PixelDTO pixelDTO) {
         Pixel pixel = this.findById(id);
 
+        pixelDTO.setUpdatedAt(new Date());
+
         Mapper.copyProperties(pixelDTO, pixel);
 
         return pixelRepository.save(pixel);
     }
+
 
     public void deleteById(UUID id) {
         Pixel pixel = this.findById(id);

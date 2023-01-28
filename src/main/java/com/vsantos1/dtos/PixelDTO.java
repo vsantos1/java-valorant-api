@@ -27,6 +27,9 @@ public class PixelDTO {
 
     private String videoUrl;
 
+    private Boolean isVerified;
+    private Boolean showUsername;
+
     private Date createdAt;
 
     private Date updatedAt;
@@ -92,10 +95,21 @@ public class PixelDTO {
         this.user = user;
     }
 
-    public Boolean getEnabled() {
-        return user.getEnable();
+    public Boolean getVerified() {
+        return isVerified;
     }
 
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
+
+    public Boolean getShowUsername() {
+        return showUsername;
+    }
+
+    public void setShowUsername(Boolean showUsername) {
+        this.showUsername = showUsername;
+    }
 
     public GameMap getGameMap() {
         return gameMap;

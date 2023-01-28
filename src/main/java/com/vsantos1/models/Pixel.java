@@ -38,6 +38,12 @@ public class Pixel implements Serializable {
     @Enumerated(EnumType.STRING)
     private TickRate tickRate;
 
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+
+    @Column(name = "show_username")
+    private Boolean showUsername;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -94,6 +100,22 @@ public class Pixel implements Serializable {
 
     public Type getType() {
         return type;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
+
+    public Boolean getShowUsername() {
+        return showUsername;
+    }
+
+    public void setShowUsername(Boolean showUsername) {
+        this.showUsername = showUsername;
     }
 
     public void setType(Type type) {

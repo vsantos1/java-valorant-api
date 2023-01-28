@@ -46,6 +46,17 @@ public class PixelResource {
         final Slugify slug = Slugify.builder().locale(Locale.ENGLISH).build();
 
         pixelDTO.setSlug(slug.slugify(pixelDTO.getTitle()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(pixelService.execute(pixelDTO,authorization));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pixelService.execute(pixelDTO, authorization));
+    }
+
+    @PutMapping(value = "/pixels/{pixel_id}")
+    public ResponseEntity<Pixel> update(@PathVariable("pixel_id") UUID id, @RequestBody PixelDTO pixelDTO) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(pixelService.update(id, pixelDTO));
+    }
+    @DeleteMapping(value = "/pixels/{pixel_id}")
+    public ResponseEntity<Void> delete(@PathVariable("pixel_id") UUID id) {
+        pixelService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
