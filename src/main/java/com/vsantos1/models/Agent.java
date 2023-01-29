@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_agents")
@@ -27,8 +28,9 @@ public class Agent implements Serializable {
     @JsonIgnore
     private Game game;
 
-    // TODO: implement pixels table
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "agent")
+    private List<Pixel> pixels;
 
     public Long getId() {
         return id;
@@ -60,5 +62,13 @@ public class Agent implements Serializable {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public List<Pixel> getPixels() {
+        return pixels;
+    }
+
+    public void setPixels(List<Pixel> pixels) {
+        this.pixels = pixels;
     }
 }

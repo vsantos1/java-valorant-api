@@ -49,6 +49,10 @@ public class Pixel implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agents_id")
+    private Agent agent;
     @ManyToOne
     @JoinColumn(name = "map_id")
     private GameMap gameMap;
@@ -176,5 +180,13 @@ public class Pixel implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 }

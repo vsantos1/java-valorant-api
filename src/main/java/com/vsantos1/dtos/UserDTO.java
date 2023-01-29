@@ -2,6 +2,7 @@ package com.vsantos1.dtos;
 
 import com.vsantos1.enums.Role;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 
 public class UserDTO {
 
@@ -11,6 +12,7 @@ public class UserDTO {
 
     @Email
     private String email;
+    @Size(min = 6)
     private String password;
 
     private Role role;

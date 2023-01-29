@@ -45,6 +45,10 @@ public class PixelResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(pixelService.execute(pixelDTO, authorization));
     }
 
+    @GetMapping(value = "/pixels/me/count")
+    public ResponseEntity<Integer> countByUser(@RequestHeader String authorization) {
+        return ResponseEntity.status(HttpStatus.OK).body(pixelService.countByUser(authorization));
+    }
     @GetMapping(value = "/pixels/me")
     public ResponseEntity<Page<Pixel>> getPixelsCreatedByUser(@RequestHeader String authorization, @PageableDefault() Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(pixelService.findPixelsCreatedByUser(authorization, pageable));
