@@ -3,6 +3,7 @@ package com.vsantos1.dtos;
 import com.vsantos1.enums.Ability;
 import com.vsantos1.enums.TickRate;
 import com.vsantos1.enums.Type;
+import com.vsantos1.models.Agent;
 import com.vsantos1.models.GameMap;
 import com.vsantos1.models.User;
 
@@ -26,6 +27,8 @@ public class PixelDTO {
     private GameMap gameMap;
 
     private String videoUrl;
+
+    private Agent agent;
 
     private Boolean isVerified;
     private Boolean showUsername;
@@ -141,5 +144,14 @@ public class PixelDTO {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 }

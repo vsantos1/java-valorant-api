@@ -5,8 +5,9 @@ import com.vsantos1.dtos.PixelDTO;
 import com.vsantos1.enums.Role;
 import com.vsantos1.exceptions.ResourceNotFoundException;
 import com.vsantos1.exceptions.UserNotAllowedException;
-import com.vsantos1.jwt.JwtService;
 import com.vsantos1.mapper.Mapper;
+import com.vsantos1.models.Agent;
+import com.vsantos1.models.GameMap;
 import com.vsantos1.models.Pixel;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.PixelRepository;
@@ -23,12 +24,17 @@ import java.util.UUID;
 public class PixelService {
 
     private final PixelRepository pixelRepository;
+    private final GameMapService gameMapService;
+
+    private final AgentService agentService;
 
 
     private final UserService userService;
 
-    public PixelService(PixelRepository pixelRepository, UserService userService) {
+    public PixelService(PixelRepository pixelRepository, GameMapService gameMapService, AgentService agentService, UserService userService) {
         this.pixelRepository = pixelRepository;
+        this.gameMapService = gameMapService;
+        this.agentService = agentService;
 
         this.userService = userService;
     }
@@ -38,6 +44,9 @@ public class PixelService {
     }
 
     public Pixel execute(PixelDTO pixelDTO, String authorization) {
+        Agent agent = this.agentService.findById(pixelDTO.getAgent().getId());
+        GameMap map = this.gameMapService.findById(pixelDTO.getGameMap().getId());
+
         if (countByUser(authorization) >= 10 && userService.isUser(authorization)) {
             throw new UserNotAllowedException("You have reached the limit of 10 pixels");
         }
@@ -60,6 +69,8 @@ public class PixelService {
         }
         pixelDTO.setVerified(false);
         pixelDTO.setUser(user);
+        pixelDTO.setGameMap(map);
+        pixelDTO.setAgent(agent);
         Mapper.copyProperties(pixelDTO, pixel);
         return pixelRepository.save(pixel);
     }
