@@ -8,15 +8,15 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityHttpConfig {
+public class SecurityHttpConfig implements WebMvcConfigurer {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -26,10 +26,19 @@ public class SecurityHttpConfig {
         this.authenticationProvider = authenticationProvider;
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
+                .allowedMethods("*");
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and()
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
@@ -37,6 +46,7 @@ public class SecurityHttpConfig {
                 .requestMatchers("/api/v1/users/activate/**").permitAll()
                 .requestMatchers("/api/v1/users").hasRole("ADMIN")
                 .requestMatchers("/api/v1/users/role/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/v1/games").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/v1/games").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/games/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/maps").permitAll()

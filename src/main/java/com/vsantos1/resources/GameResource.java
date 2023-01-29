@@ -3,8 +3,6 @@ package com.vsantos1.resources;
 import com.vsantos1.dtos.GameDTO;
 import com.vsantos1.models.Game;
 import com.vsantos1.models.GameMap;
-import com.vsantos1.repositories.GameMapRepository;
-import com.vsantos1.services.GameMapService;
 import com.vsantos1.services.GameService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -44,7 +42,6 @@ public class GameResource {
 
         return ResponseEntity.status(HttpStatus.OK).body(gameService.findById(id));
     }
-
     @PostMapping(value = "/games")
     public ResponseEntity<Game> create(@RequestBody @Valid GameDTO gameDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(gameService.execute(gameDTO));
