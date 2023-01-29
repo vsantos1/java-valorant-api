@@ -19,5 +19,6 @@ public interface PixelRepository extends JpaRepository<Pixel, UUID> {
 
     Integer countByUser(User user);
 
+    Page<Pixel> findPixelsByAgent_name(String name, Pageable pageable);
     boolean findPixelByIdAndUser(UUID id, User user);
 }

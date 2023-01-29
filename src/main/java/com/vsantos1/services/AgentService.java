@@ -5,8 +5,10 @@ import com.vsantos1.exceptions.ResourceNotFoundException;
 import com.vsantos1.mapper.Mapper;
 import com.vsantos1.models.Agent;
 import com.vsantos1.models.Game;
+import com.vsantos1.models.Pixel;
 import com.vsantos1.repositories.AgentRepository;
 import com.vsantos1.repositories.GameRepository;
+import com.vsantos1.repositories.PixelRepository;
 import com.vsantos1.services.gateways.AgentGateway;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,14 +24,22 @@ public class AgentService implements AgentGateway {
 
     private final GameRepository gameRepository;
 
-    public AgentService(AgentRepository agentRepository, GameRepository gameRepository) {
+    private final PixelRepository pixelRepository;
+
+    public AgentService(AgentRepository agentRepository, GameRepository gameRepository, PixelRepository pixelRepository) {
         this.agentRepository = agentRepository;
         this.gameRepository = gameRepository;
+        this.pixelRepository = pixelRepository;
     }
 
     @Override
     public Page<Agent> findAllPaginated(Pageable pageable) {
         return agentRepository.findAll(pageable);
+    }
+
+
+    public Page<Pixel> findPixelsByAgentName(String name, Pageable pageable) {
+        return pixelRepository.findPixelsByAgent_name(name, pageable);
     }
 
     @Override
