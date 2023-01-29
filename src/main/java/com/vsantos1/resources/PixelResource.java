@@ -61,7 +61,7 @@ public class PixelResource {
         return ResponseEntity.status(HttpStatus.OK).body(pixelService.updatePixelCreatedByUser(id, pixelDTO, authorization));
     }
 
-    @PutMapping(value = "/pixels/{pixel_id/views")
+    @PutMapping(value = "/pixels/{pixel_id}/views")
     public ResponseEntity<Void> updatePixelViews(@PathVariable("pixel_id") UUID id) {
         pixelService.updatePixelViews(id);
         return ResponseEntity.status(HttpStatus.OK).build();
