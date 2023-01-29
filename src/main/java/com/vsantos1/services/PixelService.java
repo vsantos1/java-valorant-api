@@ -39,6 +39,11 @@ public class PixelService {
         this.userService = userService;
     }
 
+    public void  updatePixelViews(UUID id){
+        Pixel pixel = this.findById(id);
+        pixel.setViews(pixel.getViews() + 1);
+        pixelRepository.save(pixel);
+    }
     public Page<Pixel> findAllPaginated(Pageable pageable) {
         return pixelRepository.findAll(pageable);
     }

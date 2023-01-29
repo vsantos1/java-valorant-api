@@ -45,6 +45,7 @@ public class PixelResource {
         return ResponseEntity.status(HttpStatus.CREATED).body(pixelService.execute(pixelDTO, authorization));
     }
 
+
     @GetMapping(value = "/pixels/me/count")
     public ResponseEntity<Integer> countByUser(@RequestHeader String authorization) {
         return ResponseEntity.status(HttpStatus.OK).body(pixelService.countByUser(authorization));
@@ -60,6 +61,11 @@ public class PixelResource {
         return ResponseEntity.status(HttpStatus.OK).body(pixelService.updatePixelCreatedByUser(id, pixelDTO, authorization));
     }
 
+    @PutMapping(value = "/pixels/{pixel_id/views")
+    public ResponseEntity<Void> updatePixelViews(@PathVariable("pixel_id") UUID id) {
+        pixelService.updatePixelViews(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
     @PutMapping(value = "/pixels/edit/{pixel_id}")
     public ResponseEntity<Pixel> update(@PathVariable("pixel_id") UUID id, @RequestBody PixelDTO pixelDTO) {
 

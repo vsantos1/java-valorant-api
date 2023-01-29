@@ -57,6 +57,8 @@ public class Pixel implements Serializable {
     @JoinColumn(name = "map_id")
     private GameMap gameMap;
 
+    private Long views;
+
     @Column(name = "video_url")
     private String videoUrl;
 
@@ -188,5 +190,13 @@ public class Pixel implements Serializable {
 
     public void setAgent(Agent agent) {
         this.agent = agent;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
     }
 }
