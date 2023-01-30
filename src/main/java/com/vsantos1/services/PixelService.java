@@ -11,6 +11,7 @@ import com.vsantos1.models.GameMap;
 import com.vsantos1.models.Pixel;
 import com.vsantos1.models.User;
 import com.vsantos1.repositories.PixelRepository;
+import com.vsantos1.repositories.filter.PixelQueryFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,14 +40,30 @@ public class PixelService {
         this.userService = userService;
     }
 
-    public void  updatePixelViews(UUID id){
+    public Page<Pixel> findAllNotVerified(Pageable pageable) {
+        return pixelRepository.findAllByIsVerifiedFalse(pageable);
+    }
+
+    public void updatePixelViews(UUID id) {
         Pixel pixel = this.findById(id);
         pixel.setViews(pixel.getViews() + 1);
         pixelRepository.save(pixel);
     }
-    public Page<Pixel> findAllPaginated(Pageable pageable) {
+
+    public Page<Pixel> findAllWithQueriesPaginated(PixelQueryFilter pixelQueryFilter, Pageable pageable) {
+        if (pixelQueryFilter.getTitle() != null ) {
+            return pixelRepository.findPixelsByTitleContainingIgnoreCase(pixelQueryFilter.getTitle(), pageable);
+        }
+        if(pixelQueryFilter.getDescription() != null && pixelQueryFilter.getTitle() == null) {
+            return pixelRepository.findPixelsByTitleAndDescriptionContainingIgnoreCase(pixelQueryFilter.getTitle(), pixelQueryFilter.getDescription(), pageable);
+        }
+        if (pixelQueryFilter.getDescription() != null) {
+            return pixelRepository.findPixelsByDescriptionContainingIgnoreCase(pixelQueryFilter.getTitle(), pageable);
+        }
         return pixelRepository.findAll(pageable);
+
     }
+
 
     public Pixel execute(PixelDTO pixelDTO, String authorization) {
         Agent agent = this.agentService.findById(pixelDTO.getAgent().getId());
@@ -68,15 +85,15 @@ public class PixelService {
         pixelDTO.setCreatedAt(new Date());
         User user = userService.loadUserByToken(authorization);
 
+
         // If user is not admin, set isVerified will start as false
-        if (user.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(Role.ROLE_ADMIN.name()))) {
-            pixelDTO.setVerified(true);
-        }
-        pixelDTO.setVerified(false);
+        pixelDTO.setVerified(user.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(Role.ROLE_ADMIN.name())));
         pixelDTO.setUser(user);
         pixelDTO.setGameMap(map);
         pixelDTO.setAgent(agent);
+
         Mapper.copyProperties(pixelDTO, pixel);
+        pixel.setViews(0L);
         return pixelRepository.save(pixel);
     }
 

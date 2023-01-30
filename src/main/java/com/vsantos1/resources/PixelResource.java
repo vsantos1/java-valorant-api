@@ -3,6 +3,7 @@ package com.vsantos1.resources;
 import com.github.slugify.Slugify;
 import com.vsantos1.dtos.PixelDTO;
 import com.vsantos1.models.Pixel;
+import com.vsantos1.repositories.filter.PixelQueryFilter;
 import com.vsantos1.services.PixelService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -27,8 +28,16 @@ public class PixelResource {
     }
 
     @GetMapping(value = "/pixels")
-    public ResponseEntity<Page<Pixel>> getAllPaginated(@PageableDefault() Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(pixelService.findAllPaginated(pageable));
+    public ResponseEntity<Page<Pixel>> getAllPaginated(@PageableDefault() Pageable pageable,
+                                                       @RequestParam(required = false) String title,@RequestParam(required = false) String description) {
+
+        PixelQueryFilter query = new PixelQueryFilter(title, description);
+        return ResponseEntity.status(HttpStatus.OK).body(pixelService.findAllWithQueriesPaginated(query,pageable));
+    }
+
+    @GetMapping(value = "/pixels/verify")
+    public ResponseEntity<Page<Pixel>> getAllNotVerified(@PageableDefault() Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(pixelService.findAllNotVerified(pageable));
     }
 
     @GetMapping(value = "/pixels/{pixel_slug}")
